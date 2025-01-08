@@ -4,12 +4,13 @@ import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';  // Importar environment
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5068/Auth';
+  private apiUrl = `${environment.apiUrl}/Auth`;  // Utilizar environment.apiUrl
   private userRoleSubject = new BehaviorSubject<string | null>(null);
   private usernameSubject = new BehaviorSubject<string | null>(null);
   userRole$ = this.userRoleSubject.asObservable();
