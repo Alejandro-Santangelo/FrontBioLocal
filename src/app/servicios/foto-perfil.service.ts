@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FotoPerfilService {
-  private apiUrl = 'http://localhost:5068/api/FotoPerfil';
+  private apiUrl = 'https://biodigestorbackend-cxf3d4e0h5akeafg.brazilsouth-01.azurewebsites.net/api/FotoPerfil';
 
   constructor(private http: HttpClient) { }
 
