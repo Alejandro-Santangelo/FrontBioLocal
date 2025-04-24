@@ -19,7 +19,13 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Auth/login`, { username, password }, { withCredentials: true });
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    return this.http.post(`${this.baseUrl}/Auth/login`, { username, password }, 
+      { headers, withCredentials: true }
+    );
   }
 
   logout(): Observable<any> {
@@ -41,6 +47,17 @@ export class AuthService {
           if (user) {
             this.roleSubject.next(user.rol || '');
             this.usernameSubject.next(user.username || '');
+            // Obtener la foto después de autenticar
+            this.getFotoPerfil().subscribe(
+              (foto: Blob) => {
+                // Crear URL para la foto
+                const imageUrl = URL.createObjectURL(foto);
+                console.log('Foto de perfil cargada:', imageUrl);
+              },
+              error => {
+                console.error('Error al cargar la foto de perfil:', error);
+              }
+            );
           }
         },
         error: () => {
@@ -68,5 +85,16 @@ export class AuthService {
       NuevaPassword: credenciales.nuevaPassword,
       PasswordActual: credenciales.passwordActual
     }, { withCredentials: true });
+  }
+
+  // Agregar método para obtener la foto de perfil
+  getFotoPerfil(): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/FotoPerfil/ObtenerFoto`, 
+      { 
+        withCredentials: true,
+        responseType: 'blob'  // Importante: especificar que esperamos un blob
+      }
+    );
   }
 }
